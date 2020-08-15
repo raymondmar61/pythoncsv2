@@ -127,3 +127,136 @@ for i in range(0, len(googlestockprice)-1):
 	todaysdate = todaysdate.strftime("%m/%d/%Y")
 	writer.writerow([todaysdate, dailyreturn])
 file.close()
+
+#Reading CSV Files In Python
+with open("samplecsv.csv","r") as fileobject:
+	csvreader = csv.reader(fileobject) #delimiter default is comma
+	print(csvreader) #print <_csv.reader object at 0x7f29992ee198>
+	for eachcsvreader in csvreader:
+		print(eachcsvreader)
+		'''
+		['Symbol', 'Current Price', 'Date', 'Time', 'Change', 'Open', 'High', 'Low', 'Volume']
+		['IMSC', '', '6/28/2019', '18:07 EDT', '', '', '', '', '']
+		['GWGWF', '', '6/28/2019', '18:07 EDT', '', '', '', '', '']
+		['RLE.V', '', '6/28/2019', '18:07 EDT', '', '', '', '', '']
+		['HEK', '', '6/28/2019', '18:07 EDT', '', '', '', '', '']
+		['HIIT', '', '', '', '', '', '', '', '']
+		['PRMW', '11.295', '3/16/2020', '15:12 EDT', '-2.0249996', '12.39', '12.96', '11.095', '2611014']
+		...
+		'''
+print(csvreader) #print <_csv.reader object at 0x7f29992ee198>
+#It seems I need another with open to read the csv file more than once.
+with open("samplecsv.csv","r") as fileobject:
+	csvreader = csv.reader(fileobject, delimiter=",")
+	for eachsymbol in csvreader:
+		print(eachsymbol[0])
+		'''
+		Symbol
+		IMSC
+		GWGWF
+		RLE.V
+		HEK
+		HIIT
+		PRMW
+	
+		'''
+with open("samplecsv.csv","r") as fileobject:
+	csvdictionaryreader = csv.DictReader(fileobject)
+	for eachcsvdictionaryreader in csvdictionaryreader:
+		#The header row is the key for the dictionary
+		#print(type(eachcsvdictionaryreader)) #print <class 'collections.OrderedDict'>
+		print(eachcsvdictionaryreader)
+		'''
+		OrderedDict([('Symbol', 'IMSC'), ('Current Price', ''), ('Date', '6/28/2019'), ('Time', '18:07 EDT'), ('Change', ''), ('Open', ''), ('High', ''), ('Low', ''), ('Volume', '')])
+		OrderedDict([('Symbol', 'GWGWF'), ('Current Price', ''), ('Date', '6/28/2019'), ('Time', '18:07 EDT'), ('Change', ''), ('Open', ''), ('High', ''), ('Low', ''), ('Volume', '')])
+		OrderedDict([('Symbol', 'RLE.V'), ('Current Price', ''), ('Date', '6/28/2019'), ('Time', '18:07 EDT'), ('Change', ''), ('Open', ''), ('High', ''), ('Low', ''), ('Volume', '')])
+		OrderedDict([('Symbol', 'HEK'), ('Current Price', ''), ('Date', '6/28/2019'), ('Time', '18:07 EDT'), ('Change', ''), ('Open', ''), ('High', ''), ('Low', ''), ('Volume', '')])
+		OrderedDict([('Symbol', 'HIIT'), ('Current Price', ''), ('Date', ''), ('Time', ''), ('Change', ''), ('Open', ''), ('High', ''), ('Low', ''), ('Volume', '')])
+		OrderedDict([('Symbol', 'PRMW'), ('Current Price', '11.295'), ('Date', '3/16/2020'), ('Time', '15:12 EDT'), ('Change', '-2.0249996'), ('Open', '12.39'), ('High', '12.96'), ('Low', '11.095'), ('Volume', '2611014')])
+		...
+		'''
+with open("samplecsv.csv","r") as fileobject:
+	csvdictionaryreader = csv.DictReader(fileobject, delimiter=",")
+	for eachcsvdictionaryreadersymbol in csvdictionaryreader:
+		#The header row is the key for the dictionary
+		print(eachcsvdictionaryreadersymbol["Symbol"])
+		'''
+		IMSC
+		GWGWF
+		RLE.V
+		HEK
+		HIIT
+		PRMW
+		...
+		'''
+
+#Writing CSV Files in Python
+with open("tempcsv.csv","w", newline="") as fileobject:
+	csvwriter = csv.writer(fileobject)
+	csvwriter.writerow(["column1","column2","column3"])
+	csvwriter.writerow(["one","two",'three'])
+	for i in range(1,10):
+		csvwriter.writerow(["rangeone","rangetwo",'rangethree'])
+		'''
+		column1,column2,column3
+		one,two,three
+		rangeone,rangetwo,rangethree
+		rangeone,rangetwo,rangethree
+		rangeone,rangetwo,rangethree
+		...
+		'''
+with open("tempcsv.csv","w", newline="") as fileobject:
+	columnnames = ["columnheader1","columnheader2","columnheader3"]
+	csvdictwriter = csv.DictWriter(fileobject, fieldnames=columnnames)
+	csvdictwriter.writeheader()
+	csvdictwriter.writerow({"columnheader1":"one","columnheader3":"writerow order doesn't matter","columnheader2":"road wallpaper"})
+	csvdictwriter.writerow({"columnheader1":"two","columnheader3":"writerow order doesn't matter I'm at the right","columnheader2":"write another row"})
+	'''
+	columnheader1,columnheader2,columnheader3
+	one,road wallpaper,writerow order doesn't matter
+	two,write another row,writerow order doesn't matter I'm at the right
+	'''
+
+#Reading a CSV file into a Python List
+readfile = open("namesages.csv","r")
+csvreader = csv.reader(readfile)
+namesageslist = []
+for eachcsvreader in csvreader:
+	namesageslist.append(eachcsvreader)
+print(namesageslist) #print [['bob', '65', 'green'], ['fred', '25', 'pink'], ['claire', '35', 'blue'], ['anna', '20', 'orange'], ['jill', '24', 'red'], ['alicia', '50', 'green']]
+for eachnamesageslist in namesageslist:
+	print(eachnamesageslist)
+	'''
+	['bob', '65', 'green']
+	['fred', '25', 'pink']
+	['claire', '35', 'blue']
+	['anna', '20', 'orange']
+	['jill', '24', 'red']
+	['alicia', '50', 'green']
+	'''
+namesageslistcorrectdatatype = []
+for correctdatatype in namesageslist:
+	namesageslistcorrectdatatype.append([correctdatatype[0],int(correctdatatype[1]),correctdatatype[2]])
+print(namesageslistcorrectdatatype) #print [['bob', 65, 'green'], ['fred', 25, 'pink'], ['claire', 35, 'blue'], ['anna', 20, 'orange'], ['jill', 24, 'red'], ['alicia', 50, 'green']]
+namesageslisttryexcept = []
+for blanklinesincsv in namesageslist:
+	try:
+		namesageslisttryexcept.append([blanklinesincsv[0],int(blanklinesincsv[1]),blanklinesincsv[2]])
+	except:
+		pass
+readfile.close()
+
+#Reading a CSV file into a Python Dictionary
+openfile = open("namesages.csv","r")
+csvreader = csv.reader(openfile)
+peopledictionary = {}
+for eachcsvreader in csvreader:
+	peopledictionary[eachcsvreader[0]] = {"age":eachcsvreader[1],"color":eachcsvreader[2]}
+openfile.close()
+print(peopledictionary) #print {'bob': {'age': '65', 'color': 'green'}, 'fred': {'age': '25', 'color': 'pink'}, 'claire': {'age': '35', 'color': 'blue'}, 'anna': {'age': '20', 'color': 'orange'}, 'jill': {'age': '24', 'color': 'red'}, 'alicia': {'age': '50', 'color': 'green'}}
+print(peopledictionary["bob"]) #print {'age': '65', 'color': 'green'}
+print(peopledictionary["bob"]["color"]) #print green
+for bonuskeys in peopledictionary.keys():
+	print(bonuskeys) #print bob\n fred\n claire\n anna\n jill\n alicia
+
+#

@@ -259,4 +259,122 @@ print(peopledictionary["bob"]["color"]) #print green
 for bonuskeys in peopledictionary.keys():
 	print(bonuskeys) #print bob\n fred\n claire\n anna\n jill\n alicia
 
-#
+#Python Accessing CSV Files -read and write-
+with open("names.csv","r") as fileobject:
+	readcsvfile = csv.reader(fileobject, delimiter=",")
+	#print(readcsvfile) #print <_csv.reader object at 0x7f0ddab07208>
+	for eachreadcsvfile in readcsvfile:
+		#print(eachreadcsvfile) #print ['first_name', 'last_name', 'email']\n ['John', 'Doe', 'john-doe@bogusemail.com']\n . . .
+		print(eachreadcsvfile[0]+", "+eachreadcsvfile[1]+", "+eachreadcsvfile[2]) #print first_name, last_name, email\n John, Doe, john-doe@bogusemail.com\n . . .
+firstname = ["Blake","Denise"]
+lastname = ["Bell","Davidson"]
+email = ["bbell@bogusemail.com","ddavidson@bogusemail.com"]
+with open("names.csv","a",newline="") as fileobject:
+	#writecsvfile = csv.writer(fileobject, delimiter=",", quoting=csv.QUOTE_ALL) #quoting=csv.QUOTE_ALL to include the quotes
+	writecsvfile = csv.writer(fileobject, delimiter=",", quoting=csv.QUOTE_NONE) #quoting=csv.QUOTE_NONE no quotes is default
+	for indexnumber in range(0,len(firstname)):
+		writecsvfile.writerow([firstname[indexnumber],lastname[indexnumber],email[indexnumber]])
+with open("names.csv") as fileobject:
+	dictionarycsvfile = csv.DictReader(fileobject, delimiter=",")
+	for eachdictionarycsvfile in dictionarycsvfile:
+		print(eachdictionarycsvfile["first_name"]+", "+eachdictionarycsvfile["last_name"]+", "+eachdictionarycsvfile["email"]) #print John, Doe, john-doe@bogusemail.com\n  Mary, Smith-Robinson, maryjacobs@bogusemail.com\n . . .
+
+#Day 14 CSV Files with Python - Read- Write - Append
+with open("data.csv","w+") as csvfileobject: #w+ read and write.  Overwrites existing file or creates new file.
+	writecsvfile = csv.writer(csvfileobject)
+	writecsvfile.writerow(["Title header","Description header","Column 3 header"])
+	writecsvfile.writerow(["Row 1","Some description","Another"])
+	writecsvfile.writerow(["Row 2","Some description","Bother"])
+with open("data.csv","r+") as csvfileobject: #r+ read and write.
+	readcsvfile = csv.reader(csvfileobject)
+	for eachreadcsvfile in readcsvfile:
+		print(eachreadcsvfile)
+		'''
+		['Title header', 'Description header', 'Column 3 header']
+		['Row 1', 'Some description', 'Another']
+		['Row 2', 'Some description', 'Bother']
+		'''
+with open("data.csv","a+") as csvfileobject: #a+ read and append.
+	writecsvfile = csv.writer(csvfileobject)
+	writecsvfile.writerow(["Row 3","More description","Cookie"])
+	writecsvfile.writerow(["Row 4","Big description","Delta"])
+with open("data.csv","r") as csvfileobject:
+	dictionaryreadcsvfile = csv.DictReader(csvfileobject)
+	print(dictionaryreadcsvfile) #print <csv.DictReader object at 0x7f8577ead518>
+	print(type(dictionaryreadcsvfile)) #print <class 'csv.DictReader'>
+	for eachdictionaryreadcsvfile in dictionaryreadcsvfile:
+		print(eachdictionaryreadcsvfile)
+		print(eachdictionaryreadcsvfile.keys())
+		print(eachdictionaryreadcsvfile["Title header"])
+		'''
+		OrderedDict([('Title header', 'Row 1'), ('Description header', 'Some description'), ('Column 3 header', 'Another')])
+		odict_keys(['Title header', 'Description header', 'Column 3 header'])
+		Row 1
+		OrderedDict([('Title header', 'Row 2'), ('Description header', 'Some description'), ('Column 3 header', 'Bother')])
+		odict_keys(['Title header', 'Description header', 'Column 3 header'])
+		Row 2
+		...
+		'''
+		keyslist = eachdictionaryreadcsvfile.keys()
+		for eachkeyslist in keyslist:
+			print(eachdictionaryreadcsvfile[eachkeyslist])
+			'''
+			Row 1
+			Some description
+			Another
+			Row 2
+			Some description
+			Bother
+			...
+			'''
+	#print(len(dictionaryreadcsvfile)) #print TypeError: object of type 'DictReader' has no len()
+with open("data.csv","a") as dictionaryappendcsvfile:
+	headernames = ["Title header","Description header","Column 3 header"]
+	dictionarywriter = csv.DictWriter(dictionaryappendcsvfile, fieldnames=headernames)
+	dictionarywriter.writeheader() #write the header or fieldnames; in this case, headernames variable.
+	dictionarywriter.writerow({"Title header":"Row 5", "Description header":"Append description","Column 3 header":"Eclaire"})
+
+#Day 15 Functions to Dynamically Add Data to CSV with Python
+def getlength(filename):
+	with open(filename) as csvfile:
+		reader = csv.reader(csvfile)
+		readerlist = list(reader)
+		print(len(readerlist)+1)
+		return len(readerlist)+1
+def appendata(filename, name, email):
+	fieldnames = ["id","name","email"]
+	nextid = getlength(filename)
+	with open(filename,"a") as appendcsvfile:
+		dictionaryappend = csv.DictWriter(appendcsvfile, fieldnames=fieldnames)
+		dictionaryappend.writeheader() #write the header or fieldnames; in this case, headernames variable.
+		dictionaryappend.writerow({"id":nextid,"name":name,"email":email})
+appendata("datanames.csv","Justin","hello@teamcfe.com")
+
+#Day 16 Edit CSV with Python - Part 2
+import shutil
+from tempfile import NamedTemporaryFile
+def getlength(filename):
+	with open(filename) as csvfile:
+		reader = csv.reader(csvfile)
+		readerlist = list(reader)
+		print(len(readerlist)+1)
+		return len(readerlist)+1
+def appendata(filename, name, email):
+	fieldnames = ["id","name","email"]
+	nextid = getlength(filename)
+	with open(filename,"a") as appendcsvfile:
+		dictionaryappend = csv.DictWriter(appendcsvfile, fieldnames=fieldnames)
+		dictionaryappend.writeheader() #write the header or fieldnames; in this case, headernames variable.
+		dictionaryappend.writerow({"id":nextid,"name":name,"email":email})
+#appendata("datanames.csv","Justin","hello@teamcfe.com")
+filename = "datanames.csv"
+temp_file = NamedTemporaryFile(delete=False)
+with open(filename, "rb") as csvfile, temp_file:
+	reader = csv.DictReader(csvfile)
+	fieldnames = ["id","name","email","amount","sent"]
+	writer = csv.DictWriter(temp_file, fieldnames=fieldnames)
+	writer.writeheader()
+	for row in reader:
+		print(row)
+		writer.writerow({"id":row["id"], "name":row["name"], "email": row["email"], "amount":"1293.23", "sent":""})
+	shutil.move(temp_file.name, filename)

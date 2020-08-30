@@ -378,3 +378,155 @@ with open(filename, "rb") as csvfile, temp_file:
 		print(row)
 		writer.writerow({"id":row["id"], "name":row["name"], "email": row["email"], "amount":"1293.23", "sent":""})
 	shutil.move(temp_file.name, filename)
+
+#Long Intro tutorial starts at 826 Python for Beginners Reading - Manipulating CSV Files
+import csv
+csvfile = open("Google Stock Market Data - google_stock_data.csv.csv")
+csvfileobject = csv.reader(csvfile)
+openpricelist = []
+for eachcsvfileobject in csvfileobject:
+	print(eachcsvfileobject)
+	print("open column second position first index "+eachcsvfileobject[1])
+	'''
+	['Date', 'Open', 'High', 'Low', 'Close', 'Volume', 'Adj Close']
+	open column second position first index Open
+	['8/19/2014', '585.002622', '587.342658', '584.002627', '586.862643', '978600', '586.862643']
+	open column second position first index 585.002622
+	'''
+	openpricelist.append(eachcsvfileobject[1])
+csvfile.close()
+print(openpricelist) #print ['Open', '585.002622', '576.11258', '577.862619', '576.182596', '567.312567', '564.522567', '569.992585', '563.562536', '568.00257', '561.782569', '570.052564', '569.042592', '570.402584', '580.602616', '586.55265', '588.752653', '588.072688', '590.402686', '596.452725', . . . 
+
+#Reading CSV Files With Python-s csv Module
+import csv
+with open("Google Stock Market Data - google_stock_data.csv.csv") as csvfileobject:
+	csvreader=csv.reader(csvfileobject, delimiter=",")
+	linecount = 0
+	for eachcsvreader in csvreader:
+		if linecount == 0:
+			print("Column names are "+(", ".join(eachcsvreader))) #print Column names are Date, Open, High, Low, Close, Volume, Adj Close
+			linecount = 1
+		else:
+			print("Open price column 2 "+eachcsvreader[1]+" Close price column 5 "+eachcsvreader[4])
+			'''
+			Open price column 2 585.002622 Close price column 5 586.862643
+			Open price column 2 576.11258 Close price column 5 582.162619
+			Open price column 2 577.862619 Close price column 5 573.482626
+			...
+			'''
+with open("Google Stock Market Data - google_stock_data.csv.csv") as csvfileobjectdictionary:
+	csvdictionaryreader=csv.DictReader(csvfileobjectdictionary, delimiter=",")
+	linecount = 0
+	for eachcsvdictionaryreader in csvdictionaryreader:
+		print(eachcsvdictionaryreader)
+		print("Columns "+ ", ".join(eachcsvdictionaryreader))
+		print("Date "+ eachcsvdictionaryreader["Date"])
+		print("Open "+ eachcsvdictionaryreader["Open"])
+		print("Close "+ eachcsvdictionaryreader["Close"])
+		'''
+		OrderedDict([('Date', '8/19/2014'), ('Open', '585.002622'), ('High', '587.342658'), ('Low', '584.002627'), ('Close', '586.862643'), ('Volume', '978600'), ('Adj Close', '586.862643')])
+		Columns Date, Open, High, Low, Close, Volume, Adj Close
+		Date 8/19/2014
+		Open 585.002622
+		Close 586.862643
+		OrderedDict([('Date', '8/18/2014'), ('Open', '576.11258'), ('High', '584.512631'), ('Low', '576.002598'), ('Close', '582.162619'), ('Volume', '1284100'), ('Adj Close', '582.162619')])
+		Columns Date, Open, High, Low, Close, Volume, Adj Close
+		Date 8/18/2014
+		Open 576.11258
+		Close 582.162619
+		OrderedDict([('Date', '8/15/2014'), ('Open', '577.862619'), ('High', '579.382595'), ('Low', '570.522603'), ('Close', '573.482626'), ('Volume', '1519100'), ('Adj Close', '573.482626')])
+		Columns Date, Open, High, Low, Close, Volume, Adj Close
+		Date 8/15/2014
+		Open 577.862619
+		Close 573.482626
+		...
+		'''
+
+#Python 3 Programming Tutorial - Reading from a CSV spreadsheet
+import csv
+with open("Google Stock Market Data - google_stock_data.csv.csv") as csvfileobject:
+	readcsv = csv.reader(csvfileobject, delimiter=",")
+	#print(readcsv) #print <_csv.reader object at 0x7f75e100c208>
+	for eachreadcsv in readcsv:
+		print("Print first column Date "+eachreadcsv[0])		
+		print("Print first column Date and sixth column Volume "+eachreadcsv[0]+ " "+eachreadcsv[5])
+		'''
+		Print first column Date Date
+		Print first column Date and sixth column Volume Date Volume
+		Print first column Date 8/19/2014
+		Print first column Date and sixth column Volume 8/19/2014 978600
+		Print first column Date 8/18/2014
+		Print first column Date and sixth column Volume 8/18/2014 1284100
+		Print first column Date 8/15/2014
+		Print first column Date and sixth column Volume 8/15/2014 1519100
+		...
+		'''
+with open("Google Stock Market Data - google_stock_data.csv.csv") as csvfileobject:
+	readcsv = csv.reader(csvfileobject, delimiter=",")
+	datelist = []
+	closepricelist = []
+	for datescloseprices in readcsv:
+		datecolumn = datescloseprices[0]
+		closepricecolumn = datescloseprices[4]
+		datelist.append(datecolumn)
+		closepricelist.append(closepricecolumn)
+	print(datelist) #print ['Date', '8/19/2014', '8/18/2014', '8/15/2014', '8/14/2014', . . .
+	print(closepricelist) #print ['Close', '586.862643', '582.162619', '573.482626', '574.652582', . . .
+
+#How to Sort CSV files and lists in Python
+import csv
+import operator
+sample = open("data.csv","r")
+csvfile = csv.reader(sample, delimiter=",")
+sortfile = sorted(csvfile,key=operator.itemgetter(0)) #sort by first column
+for eachline in sortfile:
+	print(eachline)
+	'''
+	['Row 1', 'Some description', 'Another']
+	['Row 2', 'Some description', 'Bother']
+	['Row 3', 'More description', 'Cookie']
+	['Row 4', 'Big description', 'Delta']
+	['Row 5', 'Append description', 'Eclaire']
+	['Title header', 'Description header', 'Column 3 header']
+	['Title header', 'Description header', 'Column 3 header']
+	'''
+sample.close()
+sample = open("data.csv","r")
+csvfile = csv.reader(sample, delimiter=",")
+sortfile = sorted(csvfile,key=operator.itemgetter(1)) #sort by second column
+for eachline in sortfile:
+	print(eachline)
+	'''
+	['Row 5', 'Append description', 'Eclaire']
+	['Row 4', 'Big description', 'Delta']
+	['Title header', 'Description header', 'Column 3 header']
+	['Title header', 'Description header', 'Column 3 header']
+	['Row 3', 'More description', 'Cookie']
+	['Row 1', 'Some description', 'Another']
+	['Row 2', 'Some description', 'Bother']
+	'''
+sample.close()
+alistofnumbertuples = [(5,6),(7,1),(3,2)]
+sortnumbers = sorted(alistofnumbertuples,key=operator.itemgetter(0))
+print(sortnumbers) #print [(3, 2), (5, 6), (7, 1)]
+for eachsortnumbers in sortnumbers:
+	print(eachsortnumbers)
+	'''
+	(3, 2)
+	(5, 6)
+	(7, 1)
+	'''
+
+#Prepare Twitter CSV project review write csv and basic Python
+import csv
+with open("temptwitter.csv",'w') as fileobject:
+	csvwriter = csv.writer(fileobject)
+	for i in range(1,10):
+		multipleurls = "https://www.innovateinfinitely.com, https://www.google.com, https://www.yahoo.com, https://www.reddit.com"
+		csvwriter.writerow([i,multipleurls])
+multipleurlslist = ["https://www.innovateinfinitely.com", "https://www.google.com", "https://www.yahoo.com", "https://www.reddit.com"]
+print(multipleurlslist) #print ['https://www.innovateinfinitely.com', 'https://www.google.com', 'https://www.yahoo.com', 'https://www.reddit.com']
+notmultipleurlslist = ", ".join(multipleurlslist)
+print(notmultipleurlslist) #print https://www.innovateinfinitely.com, https://www.google.com, https://www.yahoo.com, https://www.reddit.com
+notmultipleurlslistnospace = ",".join(multipleurlslist)
+print(notmultipleurlslistnospace) #print https://www.innovateinfinitely.com,https://www.google.com,https://www.yahoo.com,https://www.reddit.com
